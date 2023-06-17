@@ -7,19 +7,25 @@ console.clear();
 
 // Connecting to database
 
-const con = "mongodb://127.0.0.1:27017/pharmacy";
-mongoose.connect(con).then( ()=>{console.log('connected')});
+const con = 'mongodb://127.0.0.1:27017/pharmacy';
+mongoose.connect(con).then(() => {
+  console.log('connected');
+});
 
 // Init app
 
 const app = express();
 
-const inventory = require('./routes/inventory');
-
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
+// Managing Routes
+
+const inventory = require('./routes/inventory');
 app.use('/api/inventory/', inventory);
+
+const auth = require('./routes/auth');
+app.use('/api/auth/', auth);
 
 app.use(express.static(path.join(__dirname, 'public')));
 
