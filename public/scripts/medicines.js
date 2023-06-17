@@ -94,7 +94,7 @@ const putReq = (form, id) => {
         document.querySelector('.container').insertAdjacentHTML(
           'afterbegin',
           `
-        <div class="alert alert-warning alert-dismissible fade show my-5" role="alert">
+        <div class="alert alert-danger alert-dismissible fade show my-5" role="alert">
           <strong>Error!</strong> Something went wrong! Server has sent the following message: ${data.msg}
           <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
         </div>

@@ -51,31 +51,31 @@ router.post('/', (req, res) => {
   }
 });
 
+router.patch('/id', (req, res) => {
+  res.json({ msg: 'visit /api for documentation' });
+});
+
 router.patch('/id/:id', (req, res) => {
   const newData = req.body;
   const { name, formula, stock, price } = req.body;
 
-  console.log(newData);
-
-  let filled = false;
-  for (const k in newData) {
-    console.log(k + ':' + typeof k);
-
-    if (
-      newData[k] == 'name' ||
-      newData[k] == 'price' ||
-      newData[k] == 'stock' ||
-      newData[k] == 'formula'
-    ) {
-      filled = true;
-      console.log('true');
-    }
-  }
-
-  if (!filled) {
+  if (
+    (name == '' || name == undefined) &&
+    (formula == '' || formula == undefined) &&
+    (price == '' || price == undefined) &&
+    (stock == '' || stock == undefined)
+  ) {
     return res.status(400).json({
       status: 400,
       msg: `please fill at least one field! Accepted keys are 'name', 'formula', 'price',and 'stock'`,
+    });
+  } else if (
+    (!isNumeric(price) && price != undefined) ||
+    (!isNumeric(stock) && stock != undefined)
+  ) {
+    return res.status(400).json({
+      status: 400,
+      msg: 'Price and Stock are supposed to be purely numeric values!',
     });
   }
 
@@ -88,18 +88,12 @@ router.patch('/id/:id', (req, res) => {
         });
       } else {
         const uData = {};
-        // uData.name = newData.name != '' ? capitalise(newData.name) : data.name;
-        // uData.formula =
-        //   newData.formula != '' ? capitalise(newData.formula) : data.formula;
-        // uData.price = newData.price != '' ? newData.price : data.price;
-        // uData.stock = newData.stock != '' ? newData.stock : data.stock;
         data = data[0];
         uData.name = name != '' && name != undefined ? name : data.name;
         uData.formula =
           formula != '' && formula != undefined ? formula : data.formula;
         uData.price = price != '' && price != undefined ? price : data.price;
         uData.stock = stock != '' && stock != undefined ? stock : data.stock;
-        console.log(uData);
         uData.name = capitalise(uData.name);
         uData.formula = capitalise(uData.formula);
         Medicine.updateOne({ productID: req.params.id }, uData).then(
@@ -115,6 +109,9 @@ router.patch('/id/:id', (req, res) => {
                 msg: 'Internal server error!',
               });
             }
+          },
+          (e) => {
+            console.log(e);
           }
         );
       }

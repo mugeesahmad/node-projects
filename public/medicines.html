@@ -32,10 +32,10 @@
             <td></td>
             <td class="align-middle">
               <a
-          href="http://127.0.0.1:3000/medicine.html"
-          class="btn btn-sm btn-info text-white"
-          >New</a
-        >
+                href="http://127.0.0.1:3000/medicine.html"
+                class="btn btn-sm btn-info text-white"
+                >New</a
+              >
             </td>
           </tr>
         </tbody>
@@ -76,23 +76,29 @@
                 </div>
                 <div class="mb-3 px-5">
                   <label for="price" class="form-label">Price</label>
-                  <input
-                    name="price"
-                    type="text"
-                    class="form-control"
-                    id="price"
-                    placeholder="123" />
+                  <div class="input-group mb-3">
+                    <span class="input-group-text">Rs</span>
+                    <input
+                      name="price"
+                      type="text"
+                      class="form-control"
+                      id="price"
+                      placeholder="123" />
+                  </div>
                 </div>
                 <div class="mb-3 px-5">
                   <label for="stock" class="form-label">Stock</label>
-                  <input
-                    name="stock"
-                    type="text"
-                    class="form-control"
-                    id="stock"
-                    placeholder="123" />
+                  <div class="input-group">
+                    <input
+                      name="stock"
+                      type="text"
+                      class="form-control"
+                      id="stock"
+                      placeholder="123" />
+                    <span class="input-group-text">tablets</span>
+                  </div>
                 </div>
-                <div style="display: none;" id="product-label"></div>
+                <div style="display: none" id="product-label"></div>
               </form>
             </div>
             <div class="modal-footer">
