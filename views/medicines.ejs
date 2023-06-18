@@ -9,7 +9,8 @@
       rel="stylesheet"
       integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
       crossorigin="anonymous" />
-    <title>List of all available medicines</title>
+
+    <title>List of all the available products</title>
   </head>
   <body>
     <div class="container">
@@ -32,12 +33,26 @@
             <td></td>
             <td class="align-middle">
               <a
-                href="http://127.0.0.1:3000/medicine.html"
+                href="http://127.0.0.1:3000/medicine"
                 class="btn btn-sm btn-info text-white"
                 >New</a
               >
             </td>
           </tr>
+          <% medicines.forEach((element)=>{ %>
+          <tr data-productid="<%=element.productID%>">
+            <td class="align-middle"><%=element.name%></td>
+            <td class="align-middle"><%=element.formula%></td>
+            <td class="align-middle">Rs<span><%=element.price%></span></td>
+            <td class="align-middle">
+              <%=element.stock%><span class="px-1">tablets</span>
+            </td>
+            <td class="align-middle">
+              <button class="btn btn-sm btn-success my-1">Update</button>
+              <button class="btn btn-sm btn-danger my-1">Delete</button>
+            </td>
+          </tr>
+          <% }); %>
         </tbody>
       </table>
 

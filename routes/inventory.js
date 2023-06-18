@@ -56,7 +56,6 @@ router.patch('/id', (req, res) => {
 });
 
 router.patch('/id/:id', (req, res) => {
-  const newData = req.body;
   const { name, formula, stock, price } = req.body;
 
   if (
@@ -70,8 +69,8 @@ router.patch('/id/:id', (req, res) => {
       msg: `please fill at least one field! Accepted keys are 'name', 'formula', 'price',and 'stock'`,
     });
   } else if (
-    (!isNumeric(price) && price != undefined) ||
-    (!isNumeric(stock) && stock != undefined)
+    (!isNumeric(price) && price != undefined && price != '') ||
+    (!isNumeric(stock) && stock != undefined && stock != '')
   ) {
     return res.status(400).json({
       status: 400,

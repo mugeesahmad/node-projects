@@ -1,6 +1,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
+const passport = require('passport');
 
 // Model
 const User = require('../models/User');
@@ -9,46 +10,62 @@ const User = require('../models/User');
 
 const router = express.Router();
 
-router.post('/login', (req, res) => {
-  const { username, password } = req.body;
-  if (
-    username == '' ||
-    username == undefined ||
-    password == '' ||
-    password == undefined
-  ) {
-    return res.status(400).json({
-      status: 400,
-      msg: 'Please send all fields!',
-    });
-  }
+// router.post('/login', (req, res) => {
+//   const { username, password } = req.body;
+//   if (
+//     username == '' ||
+//     username == undefined ||
+//     password == '' ||
+//     password == undefined
+//   ) {
+//     return res.status(400).json({
+//       status: 400,
+//       msg: 'Please send all fields!',
+//     });
+//   }
 
-  const user = username.toLowerCase();
+//   const user = username.toLowerCase();
 
-  const log = async () => {
-    let result = await User.find({ username: user });
-    console.log(result);
-    if (!result[0]) {
-      return res.status(404).json({
-        status: 404,
-        msg: "username or password doesn't match!",
-      });
-    }
-    bcrypt.compare(password, result[0].password, (err, found) => {
-      if (err) throw err;
-      if (found) {
-        res.redirect('/dashboard.html');
-      } else {
-        res.status(404).json({
-          status: 404,
-          msg: "username or password doesn't match!",
-          redirect_path: '/dashboard.html',
-        });
-      }
-    });
-  };
+//   const log = async () => {
+//     let result = await User.find({ username: user });
+//     if (!result[0]) {
+//       return res.status(404).json({
+//         status: 404,
+//         msg: "username or password doesn't match!",
+//       });
+//     }
+//     bcrypt.compare(password, result[0].password, (err, found) => {
+//       if (err) throw err;
+//       if (found) {
+//         res.redirect('/dashboard.html');
+//       } else {
+//         res.status(404).json({
+//           status: 404,
+//           msg: "username or password doesn't match!",
+//           redirect_path: '/dashboard.html',
+//         });
+//       }
+//     });
+//   };
 
-  log();
+//   log();
+// });
+
+router.post('/login', (req, res, next) => {
+  passport.authenticate('local', {
+    successRedirect: '/dashboard',
+    failureRedirect: '/login',
+    failureFlash: true,
+  })(req, res, next);
+});
+
+// Logout
+router.get('/logout', (req, res) => {
+  req.logout((err) => {
+    if (err) throw err;
+    req.flash('success_msg', 'You are logged out');
+    res.redirect('/login');
+  });
 });
 
 router.post('/register', (req, res) => {
@@ -67,8 +84,6 @@ router.post('/register', (req, res) => {
       msg: 'Please send all fields: username, password, and role!',
     });
   } else if (role != 'admin' && role != 'employee') {
-    console.log(role);
-    console.log(req.body);
     return res.status(400).json({
       status: 400,
       msg: 'Role can only be admin or employee!',

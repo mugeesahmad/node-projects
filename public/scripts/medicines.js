@@ -4,39 +4,15 @@ const updateModal = new bootstrap.Modal(
   document.getElementById('update-modal')
 );
 
-// Inserting data table
-const table = document.querySelector('#medicines');
-
-fetch('/api/inventory')
-  .then((data) => {
-    return data.json();
-  })
-  .then((data) => {
-    data.forEach((element) => {
-      const row = document.createElement('tr');
-      row.innerHTML = `
-      <td class="align-middle">${element.name}</td>
-      <td class="align-middle">${element.formula}</td>
-      <td class="align-middle">Rs<span>${element.price}</span></td>
-      <td class="align-middle">${element.stock}<span class="px-1">tablets</span></td>
-      <td class="align-middle">
-        <button class="btn btn-sm btn-success my-1">Update</button>
-        <button class="btn btn-sm btn-danger my-1">Delete</button>
-      </td>
-      `;
-      row.setAttribute('data-productID', element.productID);
-      table.appendChild(row);
-      row.addEventListener('click', (e) => {
-        clicked(e);
-      });
-    });
-  });
-
 // Updating and Deleting products
 
-// document.getElementById('this').addEventListener('click', (e) => {
-//   clicked(e);
-// });
+const trs = document.querySelectorAll('tr');
+
+trs.forEach((tr) => {
+  tr.addEventListener('click', (e) => {
+    clicked(e);
+  });
+});
 
 const uName = document.getElementById('name');
 const uFormula = document.getElementById('formula');
@@ -60,10 +36,10 @@ const clicked = function (e) {
         location.reload();
       });
   } else if (e.target.innerText == 'Update') {
-    uName.value = e.currentTarget.children[0].innerText;
-    uFormula.value = e.currentTarget.children[1].innerText;
-    uPrice.value = e.currentTarget.children[2].children[0].innerText;
-    uStock.value = e.currentTarget.children[3].childNodes[0].data;
+    uName.value = e.currentTarget.children[0].innerText.trim();
+    uFormula.value = e.currentTarget.children[1].innerText.trim();
+    uPrice.value = e.currentTarget.children[2].children[0].innerText.trim();
+    uStock.value = e.currentTarget.children[3].childNodes[0].data.trim();
     uProduct.setAttribute(
       'data-id',
       e.currentTarget.getAttribute('data-productid')
