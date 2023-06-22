@@ -6,6 +6,8 @@ const expressLayouts = require('express-ejs-layouts');
 const flash = require('connect-flash');
 const session = require('express-session');
 const passport = require('passport');
+const mongoStore = require('connect-mongo');
+const cookieParser = require('cookie-parser');
 
 console.clear();
 
@@ -22,6 +24,7 @@ require('./config/passport')(passport);
 // Init app
 
 const app = express();
+app.use(cookieParser());
 
 // EJS
 app.use(expressLayouts);
@@ -36,6 +39,16 @@ app.use(
     secret: 'secret',
     resave: true,
     saveUninitialized: true,
+    rolling: true,
+    cookie: { path: '/', httpOnly: true, maxAge: 86400000 },
+    store: mongoStore.create({
+      client: mongoose.connection.getClient(),
+      dbName: 'pharmacy',
+      collectionName: 'sessions',
+      stringify: false,
+      autoRemove: 'interval',
+      autoRemoveInterval: 6 * 60,
+    }),
   })
 );
 
@@ -69,6 +82,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('*', (req, res) => {
   res.render('404');
+  res.send();
 });
 
 app.listen(3000, () => {

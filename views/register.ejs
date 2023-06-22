@@ -10,14 +10,15 @@
       integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM"
       crossorigin="anonymous"
     />
-    <title>Login</title>
+    <title>Register</title>
   </head>
   <body>
     <div class="container">
       <%- include('./partials/messages') %>
-      <div class="w-50 d-inline-block align-top">
-        <h2 class="text-primary my-5">Login</h2>
-        <form action="/api/auth/login" method="post" id="log-form">
+
+      <div class="w-50 d-inline-block">
+        <h2 class="text-primary my-5">Register</h2>
+        <form action="/api/auth/register" method="post" id="reg-form">
           <div class="mb-3">
             <label for="name" class="form-label">Username</label>
             <input name="username" type="text" class="form-control" id="name" />
@@ -31,10 +32,13 @@
               id="password"
             />
           </div>
-          <button class="btn btn-primary px-3">Login</button>
+          <select class="form-select mb-3" name="role" required>
+            <option value="employee" selected>Employee</option>
+            <option value="admin">Admin</option>
+          </select>
+          <button class="btn btn-primary px-3">Register</button>
         </form>
       </div>
-      <div class="w-25 d-inline-block"></div>
     </div>
 
     <script
